@@ -12,10 +12,10 @@ public class Album
     private Long albumUID;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="artistaUID")
+    @JoinColumn(name="artistaUID", nullable = false)
     private Artista artista;
 
-    @Column(name = "nome")
+    @Column(name = "nome", nullable = false)
     private String nome;
 
     public Long getAlbumUID() {

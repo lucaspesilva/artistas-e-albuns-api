@@ -13,7 +13,7 @@ public class Artista
     @Column(name = "artistaUID")
     private Long artistaUID;
 
-    @Column(name = "nome")
+    @Column(name = "nome", nullable = false)
     private String nome;
 
     @OneToMany(

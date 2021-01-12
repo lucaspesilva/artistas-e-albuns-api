@@ -1,6 +1,11 @@
 DROP DATABASE IF EXISTS artistas_e_albuns;
 CREATE DATABASE artistas_e_albuns;
 USE artistas_e_albuns;
+CREATE TABLE usuarioJWT(
+usuario varchar(100) NOT NULL UNIQUE,
+senha varchar(100) NOT NULL,
+PRIMARY KEY (usuario)
+);
 CREATE TABLE artista(
 artistaUID bigint AUTO_INCREMENT,
 nome varchar(100) NOT NULL,
@@ -13,6 +18,8 @@ nome varchar(100) NOT NULL,
 PRIMARY KEY (albumUID),
 FOREIGN KEY (artistaUID) REFERENCES artista(artistaUID)
 );
+
+INSERT INTO usuarioJWT (usuario, senha) VALUES ('user', '$2y$10$CCvx1ZKyFB4RPNks0yKfIOq6U/jr2yvRxJzTJNAS0EXjsvWuVQBC6');
 
 INSERT INTO artista (nome) VALUES ('Serj tankian');
 SET @ultimoArtistaUID = LAST_INSERT_ID();
