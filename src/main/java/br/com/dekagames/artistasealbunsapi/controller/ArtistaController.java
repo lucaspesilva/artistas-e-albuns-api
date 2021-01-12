@@ -1,7 +1,7 @@
 package br.com.dekagames.artistasealbunsapi.controller;
 
-import br.com.dekagames.artistasealbunsapi.dto.ArtistaRequest;
 import br.com.dekagames.artistasealbunsapi.dto.ArtistaResponse;
+import br.com.dekagames.artistasealbunsapi.dto.ArtistaRequest;
 import br.com.dekagames.artistasealbunsapi.models.Artista;
 import br.com.dekagames.artistasealbunsapi.repository.ArtistaRepository;
 import org.springframework.http.HttpStatus;
@@ -22,18 +22,18 @@ public class ArtistaController
     }
 
     @GetMapping("/")
-    public List<ArtistaRequest> findAll()
+    public List<ArtistaResponse> findAll()
     {
         var artistas = artistaRepository.findAll();
-        return artistas.stream().map(ArtistaRequest::getArtistaDTO).collect(Collectors.toList());
+        return artistas.stream().map(ArtistaResponse::getArtistaDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/{artistaUID}")
-    public ArtistaRequest findById(@PathVariable("artistaUID") Long artistaUID)
+    public ArtistaResponse findById(@PathVariable("artistaUID") Long artistaUID)
     {
         var artista = artistaRepository.findById(artistaUID);
         if(artista.isPresent()) {
-            return ArtistaRequest.getArtistaDTO(artista.get());
+            return ArtistaResponse.getArtistaDTO(artista.get());
         }
         else
         {
@@ -44,20 +44,20 @@ public class ArtistaController
     }
 
     @PostMapping("/")
-    public void newArtista(@RequestBody ArtistaResponse artistaResponse)
+    public void newArtista(@RequestBody ArtistaRequest artistaRequest)
     {
         var artista = new Artista();
-        artista.setNome(artistaResponse.getNome());
+        artista.setNome(artistaRequest.getNome());
         artistaRepository.save(artista);
     }
 
     @PutMapping("/{artistaUID}")
-    public void updateArtista(@PathVariable("artistaUID") Long artistaUID, @RequestBody ArtistaResponse artistaResponse)
+    public void updateArtista(@PathVariable("artistaUID") Long artistaUID, @RequestBody ArtistaRequest artistaRequest)
     {
         var artista = artistaRepository.findById(artistaUID);
         if(artista.isPresent()) {
             var updateArtista = artista.get();
-            updateArtista.setNome(artistaResponse.getNome());
+            updateArtista.setNome(artistaRequest.getNome());
             artistaRepository.save(updateArtista);
         }
         else
