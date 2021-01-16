@@ -7,6 +7,8 @@ import br.com.dekagames.artistasealbunsapi.dto.ArtistaResponse;
 import br.com.dekagames.artistasealbunsapi.models.Album;
 import br.com.dekagames.artistasealbunsapi.models.Artista;
 import br.com.dekagames.artistasealbunsapi.repository.AlbumRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,9 +24,18 @@ public class AlbumController {
     public AlbumController(AlbumRepository albumRepository) {this.albumRepository = albumRepository;}
 
     @GetMapping("/")
-    public List<AlbumResponse> findAll()
+    public List<AlbumResponse> findAll(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize)
     {
-        var albuns = albumRepository.findAll();
+        Pageable pageable = PageRequest.of(page, pageSize);
+        var albuns = albumRepository.findAll(pageable);
+        return albuns.stream().map(AlbumResponse::getAlbumDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/artista/{artistaUID}")
+    public List<AlbumResponse> findByArtista(@PathVariable("artistaUID") Long artistaUID, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize)
+    {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        var albuns = albumRepository.findByArtista(artistaUID, pageable);
         return albuns.stream().map(AlbumResponse::getAlbumDTO).collect(Collectors.toList());
     }
 

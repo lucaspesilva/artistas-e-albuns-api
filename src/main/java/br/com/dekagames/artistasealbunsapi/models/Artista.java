@@ -18,8 +18,7 @@ public class Artista
 
     @OneToMany(
             mappedBy = "artista",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+            cascade = CascadeType.ALL
     )
     private List<Album> albuns = new ArrayList<>();
 
