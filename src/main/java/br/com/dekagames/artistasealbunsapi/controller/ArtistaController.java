@@ -4,12 +4,14 @@ import br.com.dekagames.artistasealbunsapi.dto.ArtistaResponse;
 import br.com.dekagames.artistasealbunsapi.dto.ArtistaRequest;
 import br.com.dekagames.artistasealbunsapi.models.Artista;
 import br.com.dekagames.artistasealbunsapi.repository.ArtistaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/artista")
@@ -25,7 +27,7 @@ public class ArtistaController
     public List<ArtistaResponse> findAll()
     {
         var artistas = artistaRepository.findAll();
-        return artistas.stream().map(ArtistaResponse::getArtistaDTO).collect(Collectors.toList());
+        return StreamSupport.stream(artistas.spliterator(), false).map(ArtistaResponse::getArtistaDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/{artistaUID}")
@@ -41,6 +43,23 @@ public class ArtistaController
                     HttpStatus.NOT_FOUND, "Artista não encontrado"
             );
         }
+    }
+
+    @GetMapping("/consultar")
+    public List<ArtistaResponse> findByNome(@RequestParam("nome") String nome, @RequestParam("asc") boolean asc)
+    {
+        Sort sort = Sort.by("nome");
+        if(asc)
+        {
+            sort = sort.ascending();
+        }
+        else
+        {
+            sort = sort.descending();
+        }
+
+        var artistas = artistaRepository.findByNomeContains(nome, sort);
+        return artistas.stream().map(ArtistaResponse::getArtistaDTO).collect(Collectors.toList());
     }
 
     @PostMapping("/")
