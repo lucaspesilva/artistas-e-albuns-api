@@ -18,6 +18,13 @@ nome varchar(100) NOT NULL,
 PRIMARY KEY (albumUID),
 FOREIGN KEY (artistaUID) REFERENCES artista(artistaUID)
 );
+CREATE TABLE capa(
+capaUID bigint AUTO_INCREMENT,
+albumUID bigint NOT NULL,
+objeto varchar(255) NOT NULL,
+PRIMARY KEY (capaUID),
+FOREIGN KEY (albumUID) REFERENCES album(albumUID)
+);
 
 INSERT INTO usuarioJWT (usuario, senha) VALUES ('user', '$2y$10$CCvx1ZKyFB4RPNks0yKfIOq6U/jr2yvRxJzTJNAS0EXjsvWuVQBC6');
 
