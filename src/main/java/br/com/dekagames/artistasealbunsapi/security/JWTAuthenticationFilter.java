@@ -3,6 +3,7 @@ package br.com.dekagames.artistasealbunsapi.security;
 import br.com.dekagames.artistasealbunsapi.models.UsuarioJWT;
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,18 +20,21 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static br.com.dekagames.artistasealbunsapi.security.SecurityConstants.EXPIRATION_TIME;
-import static br.com.dekagames.artistasealbunsapi.security.SecurityConstants.HEADER_STRING;
-import static br.com.dekagames.artistasealbunsapi.security.SecurityConstants.SECRET;
-import static br.com.dekagames.artistasealbunsapi.security.SecurityConstants.TOKEN_PREFIX;
-
-
 
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
+    private final long EXPIRATION_TIME;
+    private final String HEADER_STRING;
+    private final String SECRET;
+    private final String TOKEN_PREFIX;
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+
+    public JWTAuthenticationFilter(SecurityConstants constants, AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+        this.EXPIRATION_TIME = constants.getExpirationTime();
+        this.HEADER_STRING = constants.getHeaderString();
+        this.SECRET = constants.getSecret();
+        this.TOKEN_PREFIX = constants.getTokenPrefix();
     }
 
     @Override

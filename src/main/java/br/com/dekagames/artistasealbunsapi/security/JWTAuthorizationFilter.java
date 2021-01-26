@@ -14,14 +14,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static br.com.dekagames.artistasealbunsapi.security.SecurityConstants.HEADER_STRING;
-import static br.com.dekagames.artistasealbunsapi.security.SecurityConstants.SECRET;
-import static br.com.dekagames.artistasealbunsapi.security.SecurityConstants.TOKEN_PREFIX;
-
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-    public JWTAuthorizationFilter(AuthenticationManager authManager) {
+    private final String HEADER_STRING;
+    private final String SECRET;
+    private final String TOKEN_PREFIX;
+
+    public JWTAuthorizationFilter(SecurityConstants constants, AuthenticationManager authManager) {
         super(authManager);
+        this.HEADER_STRING = constants.getHeaderString();
+        this.SECRET = constants.getSecret();
+        this.TOKEN_PREFIX = constants.getTokenPrefix();
     }
 
     @Override
