@@ -1,9 +1,6 @@
 package br.com.dekagames.artistasealbunsapi.controller;
 
-import br.com.dekagames.artistasealbunsapi.dto.AlbumRequest;
-import br.com.dekagames.artistasealbunsapi.dto.AlbumResponse;
-import br.com.dekagames.artistasealbunsapi.dto.ArtistaRequest;
-import br.com.dekagames.artistasealbunsapi.dto.ArtistaResponse;
+import br.com.dekagames.artistasealbunsapi.dto.*;
 import br.com.dekagames.artistasealbunsapi.models.Album;
 import br.com.dekagames.artistasealbunsapi.models.Artista;
 import br.com.dekagames.artistasealbunsapi.repository.AlbumRepository;
@@ -28,19 +25,29 @@ public class AlbumController {
     public AlbumController(AlbumRepository albumRepository) {this.albumRepository = albumRepository;}
 
     @GetMapping("/")
-    public List<AlbumResponse> findAll(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize)
+    public AlbumPagingResponse findAll(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize)
     {
         Pageable pageable = PageRequest.of(page, pageSize);
         var albuns = albumRepository.findAll(pageable);
-        return albuns.stream().map(AlbumResponse::getAlbumDTO).collect(Collectors.toList());
+        AlbumPagingResponse albunsPaging = new AlbumPagingResponse();
+        albunsPaging.setAlbuns(albuns.stream().map(AlbumResponse::getAlbumDTO).collect(Collectors.toList()));
+        albunsPaging.setTotalAlbuns(albuns.getTotalElements());
+        albunsPaging.setTotalPaginas(albuns.getTotalPages());
+        albunsPaging.setPaginaAtual(page);
+        return albunsPaging;
     }
 
     @GetMapping("/artista/{artistaUID}")
-    public List<AlbumResponse> findByArtista(@PathVariable("artistaUID") Long artistaUID, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize)
+    public AlbumPagingResponse findByArtista(@PathVariable("artistaUID") Long artistaUID, @RequestParam("page") int page, @RequestParam("pageSize") int pageSize)
     {
         Pageable pageable = PageRequest.of(page, pageSize);
         var albuns = albumRepository.findByArtista(artistaUID, pageable);
-        return albuns.stream().map(AlbumResponse::getAlbumDTO).collect(Collectors.toList());
+        AlbumPagingResponse albunsPaging = new AlbumPagingResponse();
+        albunsPaging.setAlbuns(albuns.stream().map(AlbumResponse::getAlbumDTO).collect(Collectors.toList()));
+        albunsPaging.setTotalAlbuns(albuns.getTotalElements());
+        albunsPaging.setTotalPaginas(albuns.getTotalPages());
+        albunsPaging.setPaginaAtual(page);
+        return albunsPaging;
     }
 
     @GetMapping("/{albumUID}")
