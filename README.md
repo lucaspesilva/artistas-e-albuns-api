@@ -20,6 +20,8 @@ Candidado: Lucas Pinto e Silva
    `mvn clean install`
 5. Rodar o docker compose para construir e rodar as imagens tanto da aplicação quanto do banco de dados:
    `docker-compose up --build --force-recreate`
+6. Executar o script de banco com alguma ferramenta de gerenciamento (como o MySQL Workbench):
+    `Script de criação do banco de dados.sql`
 
 ### Como realizar os testes
 1. Recuperar o token JWT do usuário de teste:
